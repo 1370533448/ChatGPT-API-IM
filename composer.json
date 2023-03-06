@@ -1,0 +1,5 @@
+{
+    "require": {
+        "haozi-team/chatgpt-php": "^1.4"
+    }
+}

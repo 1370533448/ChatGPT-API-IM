@@ -1,0 +1,150 @@
+<script>
+<!--
+document.write(unescape("<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>萌IM_基于ChatGPT3.5</title>
+  <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+  <script src="https://www.layuicdn.com/layui/layui.js"></script>
+  <style>
+    /* 聊天框样式 */
+    .chat-box {
+      max-width: 600px;
+      margin: 50px auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    /* 聊天框头部样式 */
+    .chat-box-header {
+      background-color: #e6f2ff;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    /* 聊天框内容样式 */
+    .chat-box-content {
+      padding: 10px;
+      height: 400px;
+      overflow-y: scroll;
+    }
+
+    /* 用户消息样式 */
+    .user-message {
+      margin-bottom: 10px;
+      text-align: right;
+    }
+
+    /* 机器人消息样式 */
+    .robot-message {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    /* 输入框样式 */
+    .chat-box-input {
+      margin-top: 10px;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    /* 发送按钮样式 */
+    .chat-box-send-btn {
+      margin-left: 10px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <div class="chat-box-header">萌萌Chat</div>
+    <div class="chat-box-content" id="chat-box-content"></div>
+  
+
+<div class="chat-box-input" style="display: flex; justify-content: space-between;">
+  <input type="text" id="chat-gpt-input" name="question" autocomplete="off" class="layui-input layui-inline" style="flex: 1; text-align: left;" placeholder="请输入您的消息，按下回车发送。" onkeydown="if (event.keyCode === 13) document.querySelector('.chat-box-send-btn').click()" />
+  <button type="button" class="layui-btn layui-btn-primary chat-box-send-btn" onclick="chatGPT()" style="margin-left: 10px;">发送</button>
+
+
+
+  </div>
+
+  <script>
+function chatGPT() {
+  // 获取用户输入框中的内容
+  var userInput = document.getElementById('chat-gpt-input').value.trim();
+  if (userInput === '') {
+    return; // 如果用户输入为空，则不发送消息
+  }
+
+  // 将聊天框头部文字修改为“对方正在输入...”动态效果
+  var chatBoxHeader = document.querySelector('.chat-box-header');
+  var dots = '';
+  var interval = setInterval(function() {
+    if (dots.length < 3) {
+      dots += '.';
+    } else {
+      dots = '';
+    }
+    chatBoxHeader.innerHTML = '对方正在输入' + dots;
+  }, 500);
+
+  // 将用户输入的消息添加到聊天框架中
+  var chatBoxContent = document.getElementById('chat-box-content');
+  var userMessage = document.createElement('div');
+  userMessage.classList.add('user-message');
+  userMessage.innerHTML = 'ME：' + userInput;
+  chatBoxContent.appendChild(userMessage);
+
+  // 将输入框置为不可编辑状态，避免重复发送消息
+  document.getElementById('chat-gpt-input').disabled = true;
+
+  // 发送消息到机器人API
+  var xhr = new XMLHttpRequest();
+  var url = "/api.php?question=" + encodeURIComponent(userInput);
+  xhr.open("GET", url, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        var response = xhr.responseText;
+
+        // 将机器人的回答添加到聊天框架中
+        var robotMessage = document.createElement('div');
+        robotMessage.classList.add('robot-message');
+        robotMessage.innerHTML = '萌萌：' + response;
+        chatBoxContent.appendChild(robotMessage);
+
+        // 将聊天框向下滚动到最新消息
+        chatBoxContent.scrollTop = chatBoxContent.scrollHeight;
+
+        // 移除聊天框头部动态效果，将标题改回萌萌Chat
+        clearInterval(interval);
+        chatBoxHeader.innerHTML = '萌萌Chat';
+      } else {
+        // 显示错误提示信息
+        var errorMessage = document.createElement('div');
+        errorMessage.classList.add('robot-message');
+        errorMessage.innerHTML = '萌萌：服务器开小差了，请重新发送！';
+        chatBoxContent.appendChild(errorMessage);
+      }
+
+      // 清空用户输入框，将其置为可编辑状态
+      document.getElementById("chat-gpt-input").value = "";
+      document.getElementById('chat-gpt-input').disabled = false;
+    }
+  };
+  xhr.send(null);
+}
+
+
+</script>
+</body>
+</html>
+"));
+//-->
+</script>

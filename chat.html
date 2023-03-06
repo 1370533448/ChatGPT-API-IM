@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>猫娘AI</title>
+  <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+  <script src="https://www.layuicdn.com/layui/layui.js"></script>
+  <style>
+    /* 调整输入框和按钮的样式 */
+    .layui-input-inline {
+      width: 80%;
+    }
+
+    .layui-btn-primary {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layui-container" style="margin-top: 50px;">
+    <div class="layui-row">
+      <div class="layui-col-md6 layui-col-md-offset3">
+        <div class="layui-card">
+          <div class="layui-card-body">
+            <form class="layui-form">
+              <div class="layui-form-item">
+                <label class="layui-form-label">说话</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="chat-gpt-input" name="question" autocomplete="off" class="layui-input" style="text-align: left;" />
+                </div>
+                <div class="layui-input-inline">
+                  <button type="button" class="layui-btn layui-btn-primary" onclick="chatGPT()">发送</button>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">回答</label>
+                <div class="layui-input-block">
+                  <textarea id="chatgpt-response" name="answer" class="layui-textarea" rows="5" readonly></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function chatGPT() {
+      // 显示加载中
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        var index = layer.load(2);
+
+        var xhr = new XMLHttpRequest();
+        var url = "https://api.uu.ci/qun.php?question=" + encodeURIComponent(document.getElementById("chat-gpt-input").value);
+        xhr.open("GET", url, true);
+       xhr.onreadystatechange = function() {
+if (xhr.readyState === 4 && xhr.status === 200) {
+var response = xhr.responseText;
+        // 将返回值输出到文本框
+        document.getElementById("chatgpt-response").value = response;
+function typeWriter(element, text, i) {
+  if (i < text.length) {
+    setTimeout(function() {
+      element.value += text.charAt(i);
+      typeWriter(element, text, i + 1);
+    }, 10);
+  }
+}
+
+// 调用打字机效果函数
+var responseElement = document.getElementById("chatgpt-response");
+typeWriter(responseElement, response, 0);
+
+        // 关闭加载中效果
+        layer.close(index);
+      }
+    };
+    xhr.send(null);
+  });
+}
+ </script>
+</body>
+</html>
