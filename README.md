@@ -1,6 +1,8 @@
 # ChatGPT-PHPAPI+HTML聊天窗口
 HTML+PHP,装上就能用的GPT猫娘（当然可以自己修改角色预定）你可以向TA灌输2000字符的知识（建议）
 
+示例：https://im.gpt.wf/
+
 接口SDK来自：
 https://github.com/HaoZi-Team/ChatGPT-PHP
 
